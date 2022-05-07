@@ -5,6 +5,7 @@ const {
   coursesUpdate,
   coursesDelete,
   fetchCourse,
+  courseEnroll,
 } = require('./courses.controllers');
 
 router.param('courseId', async (req, res, next, courseId) => {
@@ -20,9 +21,10 @@ router.param('courseId', async (req, res, next, courseId) => {
 });
 
 router.get('/', coursesGet);
+router.post('/:courseId/:studentId', courseEnroll);
 
-router.delete('/:coarseId', coursesDelete);
+router.delete('/:courseId', coursesDelete);
 
-router.put('/:coarseId', coursesUpdate);
+router.put('/:courseId', coursesUpdate);
 
 module.exports = router;

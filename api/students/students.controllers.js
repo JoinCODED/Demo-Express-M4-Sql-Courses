@@ -1,4 +1,4 @@
-let Student = require('../../db/models/Student');
+const { Student, Course } = require('../../db/models');
 
 exports.fetchStudent = async (studentId, next) => {
   try {
@@ -11,6 +11,7 @@ exports.fetchStudent = async (studentId, next) => {
 
 exports.studentsCreate = async (req, res) => {
   try {
+    console.log(Student);
     const newStudent = await Student.create(req.body);
     res.status(201).json(newStudent);
   } catch (error) {
@@ -38,7 +39,15 @@ exports.studentsUpdate = async (req, res) => {
 
 exports.studentsGet = async (req, res) => {
   try {
-    const students = await Student.findAll();
+    const students = await Student.findAll({
+      include: [
+        {
+          model: Course,
+          as: 'courses',
+          through: { attributes: [] },
+        },
+      ],
+    });
     res.json(students);
   } catch (error) {
     res.status(500).json({ message: error.message });

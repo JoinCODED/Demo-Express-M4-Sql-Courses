@@ -1,9 +1,19 @@
-let Course = require('../../db/models/Course');
+const { Course, Student, Teacher } = require('../../db/models');
 
 exports.fetchCourse = async (courseId, next) => {
   try {
     const course = await Course.findByPk(courseId);
     return course;
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.courseEnroll = async (req, res, next) => {
+  try {
+    const { studentId } = req.params;
+    await req.course.addStudent(studentId);
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -31,11 +41,18 @@ exports.coursesGet = async (req, res) => {
   try {
     const courses = await Course.findAll({
       attributes: { exclude: ['teacherId', 'createdAt', 'updatedAt'] },
-      include: {
-        model: Teacher,
-        as: 'teacher',
-        attributes: ['name'],
-      },
+      include: [
+        {
+          model: Teacher,
+          as: 'teacher',
+          attributes: ['name'],
+        },
+        {
+          model: Student,
+          as: 'students',
+          through: { attributes: [] },
+        },
+      ],
     });
 
     res.json(courses);

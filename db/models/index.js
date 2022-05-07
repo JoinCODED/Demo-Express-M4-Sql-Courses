@@ -55,4 +55,16 @@ db.Course.belongsTo(db.Teacher, {
   foreignKey: 'teacherId',
 });
 
+db.Student.belongsToMany(db.Course, {
+  through: 'Enrollments',
+  as: 'courses',
+  foreignKey: 'studentId',
+});
+
+db.Course.belongsToMany(db.Student, {
+  through: 'Enrollments',
+  as: 'students',
+  foreignKey: 'courseId',
+});
+
 module.exports = db;
