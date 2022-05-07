@@ -23,8 +23,8 @@ router.param('courseId', async (req, res, next, courseId) => {
 router.get('/', coursesGet);
 router.post('/', coursesCreate);
 
-router.delete('/:coarseId', coursesDelete);
+router.delete('/:courseId', coursesDelete);
 
-router.put('/:coarseId', coursesUpdate);
+router.put('/:courseId', coursesUpdate);
 
 module.exports = router;

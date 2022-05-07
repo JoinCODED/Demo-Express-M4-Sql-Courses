@@ -1,4 +1,4 @@
-let Teacher = require('../../db/models/Teacher');
+const { Teacher } = require('../../db/models');
 
 exports.fetchTeacher = async (teacherId, next) => {
   try {
