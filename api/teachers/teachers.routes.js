@@ -6,6 +6,7 @@ const {
   teachersDelete,
   teachersCreate,
   fetchTeacher,
+  coursesCreate,
 } = require('./teachers.controllers');
 
 router.param('teacherId', async (req, res, next, teacherId) => {
@@ -22,6 +23,7 @@ router.param('teacherId', async (req, res, next, teacherId) => {
 
 router.get('/', teachersGet);
 router.post('/', teachersCreate);
+router.post('/:teacherId/courses', coursesCreate);
 
 router.delete('/:teacherId', teachersDelete);
 

@@ -9,15 +9,6 @@ exports.fetchCourse = async (courseId, next) => {
   }
 };
 
-exports.coursesCreate = async (req, res) => {
-  try {
-    const newCourse = await Course.create(req.body);
-    res.status(201).json(newCourse);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 exports.coursesDelete = async (req, res) => {
   try {
     await req.course.destroy();
@@ -38,7 +29,15 @@ exports.coursesUpdate = async (req, res) => {
 
 exports.coursesGet = async (req, res) => {
   try {
-    const courses = await Course.findAll();
+    const courses = await Course.findAll({
+      attributes: { exclude: ['teacherId', 'createdAt', 'updatedAt'] },
+      include: {
+        model: Teacher,
+        as: 'teacher',
+        attributes: ['name'],
+      },
+    });
+
     res.json(courses);
   } catch (error) {
     res.status(500).json({ message: error.message });

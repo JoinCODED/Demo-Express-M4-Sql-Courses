@@ -9,6 +9,16 @@ exports.fetchTeacher = async (teacherId, next) => {
   }
 };
 
+exports.coursesCreate = async (req, res) => {
+  try {
+    req.body.teacherId = req.teacher.id;
+    const newCourse = await Course.create(req.body);
+    res.status(201).json(newCourse);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.teachersCreate = async (req, res) => {
   try {
     const newTeacher = await Teacher.create(req.body);
@@ -38,7 +48,14 @@ exports.teachersUpdate = async (req, res) => {
 
 exports.teachersGet = async (req, res) => {
   try {
-    const teachers = await Teacher.findAll();
+    const teachers = await Teacher.findAll({
+      attributes: ['id', 'name'],
+      include: {
+        model: Course,
+        as: 'courses',
+        attributes: ['id', 'name'],
+      },
+    });
     res.json(teachers);
   } catch (error) {
     res.status(500).json({ message: error.message });
